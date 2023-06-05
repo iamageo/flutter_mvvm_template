@@ -11,7 +11,7 @@ class AppRepositoryImpl implements AppRepository {
   @override
   Future<List<BaseModel>> getDataExample() async {
     try {
-      print("cheguei na rota");
+
       dynamic response = await _apiService.getResponse(ApiEndPoints().getData);
 
       if (response is List) {
