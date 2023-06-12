@@ -25,7 +25,7 @@ class _ExampleScreenState extends State<ExampleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("MVVM Flutter Template"),
+        title: const Text("get example"),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -72,8 +72,11 @@ class _ExampleScreenState extends State<ExampleScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
         itemCount: viewModel.baseResponse.value.data?.length,
         itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-              title: Text(viewModel.baseResponse.value.data![index].name!));
+          return ExpansionTile(
+            leading: const FlutterLogo(),
+              title: Text(viewModel.baseResponse.value.data![index].title!), children: [
+                Text(viewModel.baseResponse.value.data![index].body!, style: const TextStyle(),)
+          ],);
         },
       ),
     );
