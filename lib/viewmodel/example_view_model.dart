@@ -12,6 +12,7 @@ class ExampleViewModel extends GetxController {
   final _api = AppRepositoryImpl();
 
   Rx<ApiResponse<List<BaseModel>>> baseResponse = ApiResponse<List<BaseModel>>.loading().obs;
+  Rx<ApiResponse<BaseModel>> postResponse = ApiResponse<BaseModel>.loading().obs;
 
   void fetchDataFromApi() async {
     _setData(ApiResponse.loading());
@@ -32,8 +33,32 @@ class ExampleViewModel extends GetxController {
     }
   }
 
+  void sendDataFromApi(BaseModel baseModel) async {
+    _setData(ApiResponse.loading());
+
+    try {
+      final data = await _api.postDataExample(baseModel);
+      print(data);
+      _setPostData(ApiResponse.completed(data));
+    } on SocketException {
+      _setPostData(ApiResponse.error('No Internet Connection'));
+    } on BadRequestException {
+      _setPostData(ApiResponse.error('Bad request'));
+    } on UnauthorisedException {
+      _setPostData(ApiResponse.error('Unauthorized'));
+    } on FetchDataException {
+      _setPostData(ApiResponse.error('An error occurred while communicating with the server'));
+    } catch (e) {
+      _setPostData(ApiResponse.error('An unknown error occurred: ${e.toString()}'));
+    }
+  }
+
   void _setData(ApiResponse<List<BaseModel>> response) {
     baseResponse.value = response;
+  }
+
+  void _setPostData(ApiResponse<BaseModel> response) {
+    postResponse.value = response;
   }
 
 }

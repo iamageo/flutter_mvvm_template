@@ -18,11 +18,28 @@ class AppRepositoryImpl implements AppRepository {
         List<BaseModel> jsonData = response.map((item) => BaseModel.fromJson(item)).toList();
         return jsonData;
       } else {
-        throw FormatException('Received data is not a list');
+        throw const FormatException('Received data is not a list');
       }
 
     } catch (e) {
       rethrow;
     }
   }
+
+  @override
+  Future<BaseModel> postDataExample(BaseModel model) async {
+    try {
+      dynamic response = await _apiService.postResponse(ApiEndPoints().postData, model.toJson());
+
+      if (response.isNotEmpty) {
+        BaseModel jsonData = BaseModel.fromJson(response);
+        return jsonData;
+      } else {
+        throw const FormatException('Received data is not in correct format');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 }
