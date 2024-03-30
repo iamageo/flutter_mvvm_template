@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mvvm_template/ui/post_example_screen.dart';
+import 'package:flutter_mvvm_template/ui/post/post_example_screen.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
-import 'get_example_screen.dart';
+import 'get/get_example_screen.dart';
 
 class BaseScreen extends StatefulWidget {
   const BaseScreen({super.key});

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mvvm_template/viewmodel/example_view_model.dart';
+import 'package:flutter_mvvm_template/remote/model/base_model.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../remote/response/api_status.dart';
+import '../controller/example_view_model.dart';
+
 
 class ExampleScreen extends StatefulWidget {
   const ExampleScreen({super.key});
@@ -13,11 +14,11 @@ class ExampleScreen extends StatefulWidget {
 }
 
 class _ExampleScreenState extends State<ExampleScreen> {
-  final ExampleViewModel viewModel = Get.put(ExampleViewModel());
+  ExampleViewModel viewModel = Get.find<ExampleViewModel>();
 
   @override
   void initState() {
-    viewModel.fetchDataFromApi();
+    viewModel.getPosts();
     super.initState();
   }
 
@@ -31,23 +32,18 @@ class _ExampleScreenState extends State<ExampleScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Obx(() {
-            switch (viewModel.baseResponse.value.status) {
-              case Status.LOADING:
-                return buildShimmerEffect();
-              case Status.ERROR:
-                return buildUserError();
-              case Status.COMPLETED:
-                return buildUserList();
-              default:
-                return Container();
-            }
+            return viewModel.getResponse!.value.when(
+              loading: () => buildShimmerEffect(),
+              success: (list) => buildUserList(list),
+              error: (message) => buildUserError(message),
+            );
           })
         ],
       ),
     );
   }
 
-  Padding buildUserError() {
+  Padding buildUserError(String message) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -55,10 +51,10 @@ class _ExampleScreenState extends State<ExampleScreen> {
         children: [
           Align(
               alignment: Alignment.center,
-              child: Text('Ops, ocorreu um erro, tente novamente. ${viewModel.baseResponse.value.message}')),
+              child: Text('Ops, ocorreu um erro, tente novamente. ${message}')),
           ElevatedButton(
               onPressed: () {
-                viewModel.fetchDataFromApi();
+                viewModel.getPosts();
               },
               child: const Text("Tentar novamente"))
         ],
@@ -66,16 +62,16 @@ class _ExampleScreenState extends State<ExampleScreen> {
     );
   }
 
-  Expanded buildUserList() {
+  Expanded buildUserList(List<BaseModel> list) {
     return Expanded(
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-        itemCount: viewModel.baseResponse.value.data?.length,
+        itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {
           return ExpansionTile(
             leading: const FlutterLogo(),
-              title: Text(viewModel.baseResponse.value.data![index].title!), children: [
-                Text(viewModel.baseResponse.value.data![index].body!, style: const TextStyle(),)
+              title: Text(list[index].title!), children: [
+                Text(list[index].body!, style: const TextStyle(),)
           ],);
         },
       ),

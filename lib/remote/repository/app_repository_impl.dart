@@ -1,45 +1,48 @@
+import 'package:dio/dio.dart';
+import 'package:flutter_mvvm_template/remote/api/http_manager.dart';
+import 'package:flutter_mvvm_template/remote/response/api_response.dart';
+
 import '../api/api_endpoints.dart';
-import '../api/api_service.dart';
-import '../api/base_api_service.dart';
 import '../model/base_model.dart';
 import 'app_repository.dart';
 
 class AppRepositoryImpl implements AppRepository {
-
-  final BaseApiService _apiService = NetworkApiService();
+  final _httpManager = HttpManager();
 
   @override
-  Future<List<BaseModel>> getDataExample() async {
+  Future<ApiResponse<List<BaseModel>>> getDataExample() async {
     try {
+      dynamic response = await _httpManager.restRequest(
+          url: ApiEndPoints().getData, method: HttpMethods.get);
 
-      dynamic response = await _apiService.getResponse(ApiEndPoints().getData);
-
-      if (response is List) {
-        List<BaseModel> jsonData = response.map((item) => BaseModel.fromJson(item)).toList();
-        return jsonData;
+      if (response != null) {
+        List<BaseModel> jsonData = List<BaseModel>.from(response.map((item) => BaseModel.fromJson(item)));
+        return ApiResponse.success(data: jsonData);
       } else {
-        throw const FormatException('Received data is not a list');
+        return ApiResponse.error(message: "Ocorreu um erro");
       }
-
     } catch (e) {
-      rethrow;
+      return ApiResponse.error(message: e.toString());
     }
   }
 
   @override
-  Future<BaseModel> postDataExample(BaseModel model) async {
+  Future<ApiResponse<BaseModel>> postDataExample(BaseModel model) async {
     try {
-      dynamic response = await _apiService.postResponse(ApiEndPoints().postData, model.toJson());
+      dynamic response = await _httpManager.restRequest(
+          url: ApiEndPoints().postData,
+          body: model.toJson(),
+          method: HttpMethods.post);
 
-      if (response.isNotEmpty) {
+      if (response != null) {
         BaseModel jsonData = BaseModel.fromJson(response);
-        return jsonData;
+        return ApiResponse.success(data: jsonData);
       } else {
-        throw const FormatException('Received data is not in correct format');
+        return ApiResponse.error(message: "Ocorreu um erro");
       }
     } catch (e) {
-      rethrow;
+      print(e);
+      return ApiResponse.error(message: e.toString());
     }
   }
-
 }

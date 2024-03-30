@@ -1,21 +1,24 @@
-import 'api_status.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class ApiResponse<T> {
+part 'api_response.freezed.dart';
 
-  Status? status;
-  T? data;
-  String? message;
+@freezed
+class ApiResponse<T> with _$ApiResponse<T> {
+  factory ApiResponse.loading() = Loading;
+  factory ApiResponse.success({required T data}) = Success;
+  factory ApiResponse.error({required String message}) = Error;
+}
 
-  ApiResponse(this.status,this.data,this.message);
-
-  ApiResponse.loading() : status = Status.LOADING;
-
-  ApiResponse.completed(this.data) : status = Status.COMPLETED;
-
-  ApiResponse.error(this.message) : status = Status.ERROR;
-
-  @override
-  String toString() {
-    return "Status : $status \n Message : $message \n Data : $data";
+extension ApiResponseX<T> on ApiResponse<T> {
+  void whenOptional({
+    void Function()? loading,
+    required void Function(T data) success,
+    required void Function(String message) error,
+  }) {
+    when(
+      loading: loading ?? () {},
+      success: success,
+      error: error,
+    );
   }
 }
