@@ -19,6 +19,49 @@ The Repository pattern is an integral part of this architecture. The repository 
 ## About GetX 📦
 GetX is an efficient and easy to use state management, navigation, and dependency injection library for Flutter. In the context of this architecture, GetX is used to bind the ViewModels to Widgets in a reactive way, making it easy to update the UI whenever the ViewModel's state changes.
 
+## About Freezed? 🧊
+In our Flutter MVVM template, we utilize the freezed library for creating immutable, safe, and more expressive classes. Freezed allows us to work with design patterns such as Union/Sealed classes, generating necessary boilerplate code for copyWith, hashCode, toString, and more.
+
+### Key Advantages:
+
+* Simplifies the creation of immutable data models.
+* Supports union/sealed classes, making state management easier.
+* Integrates with json_serializable for efficient JSON conversions.
+
+```flutter
+@freezed
+class MyModel with _$MyModel {
+  const factory MyModel({
+    required String id,
+    required String name,
+  }) = _MyModel;
+
+  factory MyModel.fromJson(Map<String, dynamic> json) => _$MyModelFromJson(json);
+}
+```
+
+## About Json Annotation 📝
+Json_annotation is used in conjunction with freezed to provide a powerful and flexible way to handle JSON serialization and deserialization. This allows our data models to efficiently communicate with REST APIs by converting JSON data to and from our Dart models.
+
+### How We Use It:
+
+* We define our data models with json_serializable annotations.
+* The necessary code for serializing/deserializing is automatically generated.
+* We integrate this code with freezed for a seamless development experience.
+
+```flutter
+@JsonSerializable()
+class UserModel {
+  String name;
+  String email;
+
+  UserModel({required this name, required this email});
+
+  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
+}
+```
+
 ## How to use this project 🛠️
 * Clone the repository
 * Clone this repository to your local machine.
@@ -32,25 +75,34 @@ The project is structured as follows:
 lib
 │   main.dart   
 └───ui
-│   └───viewmodel
+│   └───controller
 │       │   example_view_model.dart
+│   └───get
+│       │   get_example_screen.dart
+│   └───post
+│       │   post_example_screen.dart
 └───remote
 │   └───api
-│   └───exceptions
+│       │   api_endpoints.dart
+│       │   http_manager.dart
 │   └───model
+│       │   base_model.dart
+│       │   base_model.g.dart
 │   └───repository
+│       │   app_repository.dart
+│       │   app_repository_impl.dart
 │   └───response
-│       │   file111.txt
+│       │   api_response.dart
+│       │   api_response.freezed.dart
 │       │   ...
 ```
 
 * lib - Contains the main source code of the app.
 * models - Contains data models.
-* views - Contains user interface files.
-* viewmodels - Contains ViewModel.
+* ui - Contains user interface files.
+* controller - Contains GetXController (reference to viewModel).
 * remote - Contains API related files.
 * api - Contains all API-related classes.
-* exceptions - Contains custom exception classes that handle specific scenarios.
 * model - Contains data models.
 * repository - Contains the Repository classes.
 * response - Contains response classes used for handling API responses.
