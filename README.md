@@ -19,7 +19,7 @@ The Repository pattern is an integral part of this architecture. The repository 
 ## About GetX 📦
 GetX is an efficient and easy to use state management, navigation, and dependency injection library for Flutter. In the context of this architecture, GetX is used to bind the ViewModels to Widgets in a reactive way, making it easy to update the UI whenever the ViewModel's state changes.
 
-## About Freezed? 🧊
+## About Freezed 🧊
 In our Flutter MVVM template, we utilize the freezed library for creating immutable, safe, and more expressive classes. Freezed allows us to work with design patterns such as Union/Sealed classes, generating necessary boilerplate code for copyWith, hashCode, toString, and more.
 
 ### Key Advantages:
