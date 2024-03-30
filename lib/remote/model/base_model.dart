@@ -1,3 +1,8 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'base_model.g.dart';
+
+@JsonSerializable()
 class BaseModel {
   int? id;
   String? title;
@@ -6,19 +11,8 @@ class BaseModel {
 
   BaseModel({this.id, this.title, this.body, this.userId});
 
-  BaseModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    body = json['body'];
-    userId = json['userId'];
-  }
+  factory BaseModel.fromJson(Map<String, dynamic> json) => _$BaseModelFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['title'] = title;
-    data['body'] = body;
-    data['userId'] = userId;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$BaseModelToJson(this);
+
 }
