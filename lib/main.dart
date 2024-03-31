@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mvvm_template/router/screen_controller.dart';
+import 'package:flutter_mvvm_template/router/screen_name.dart';
 import 'package:flutter_mvvm_template/ui/base_screen.dart';
-import 'package:flutter_mvvm_template/ui/controller/example_view_model.dart';
 import 'package:get/get.dart';
 
 void main() {
@@ -18,9 +19,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      onInit: () {
-        Get.put(ExampleViewModel(), permanent: true);
-      },
+      initialRoute: ScreensNames.home,
+      getPages: AppScreens.screens,
       home: const BaseScreen(),
     );
   }

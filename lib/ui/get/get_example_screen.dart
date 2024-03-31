@@ -6,14 +6,14 @@ import 'package:shimmer/shimmer.dart';
 import '../controller/example_view_model.dart';
 
 
-class ExampleScreen extends StatefulWidget {
-  const ExampleScreen({super.key});
+class GetExampleScreen extends StatefulWidget {
+  const GetExampleScreen({super.key});
 
   @override
-  State<ExampleScreen> createState() => _ExampleScreenState();
+  State<GetExampleScreen> createState() => _GetExampleScreenState();
 }
 
-class _ExampleScreenState extends State<ExampleScreen> {
+class _GetExampleScreenState extends State<GetExampleScreen> {
   ExampleViewModel viewModel = Get.find<ExampleViewModel>();
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mvvm_template/router/screen_name.dart';
 import 'package:flutter_mvvm_template/ui/post/post_example_screen.dart';
 import 'package:get/get.dart';
 import 'get/get_example_screen.dart';
@@ -25,12 +26,12 @@ class _BaseScreenState extends State<BaseScreen> {
           children: [
             ElevatedButton(
                 onPressed: () {
-                  Get.to(() => const ExampleScreen());
+                  Get.toNamed(ScreensNames.getExample);
                 },
                 child: const Text("GET")),
             ElevatedButton(
                 onPressed: () {
-                  Get.to(() => const PostExampleScreen());
+                  Get.toNamed(ScreensNames.postExample);
                 },
                 child: const Text("POST"))
           ],
