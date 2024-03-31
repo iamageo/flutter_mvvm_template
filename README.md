@@ -78,8 +78,10 @@ lib
 │   └───controller
 │       │   example_view_model.dart
 │   └───get
+│       └───binding
 │       │   get_example_screen.dart
 │   └───post
+│       └───binding
 │       │   post_example_screen.dart
 └───remote
 │   └───api
@@ -95,6 +97,10 @@ lib
 │       │   api_response.dart
 │       │   api_response.freezed.dart
 │       │   ...
+└───router
+│       │   screen_controller.dart
+│       │   screen_name.dart
+
 ```
 
 * lib - Contains the main source code of the app.
@@ -106,6 +112,10 @@ lib
 * model - Contains data models.
 * repository - Contains the Repository classes.
 * response - Contains response classes used for handling API responses.
+* router - Class organizes and centralizes the definitions of app screens, including their routes and bindings in GetX.
+
+## Note 📝
+A different approach is to create a GetX controller for each screen and inject this controller into the binding. In my template, I opted to create only one controller and use it for multiple screens to simplify the structure.
 
 I hope you find this project useful as a starting point for building Flutter apps using the MVVM architecture, Repository pattern, and GetX! 😃
 
