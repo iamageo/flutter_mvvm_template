@@ -1,3 +1,4 @@
+import 'package:flutter_mvvm_template/remote/repository/app_repository.dart';
 import 'package:flutter_mvvm_template/remote/repository/app_repository_impl.dart';
 import 'package:get/get.dart';
 
@@ -6,7 +7,9 @@ import '../../remote/response/api_response.dart';
 
 class ExampleViewModel extends GetxController {
 
-  final _api = AppRepositoryImpl();
+  final AppRepository _api;
+
+  ExampleViewModel({required AppRepository api}) : _api = api;
 
   Rx<ApiResponse<List<BaseModel>>> getResponse = ApiResponse<List<BaseModel>>.loading().obs;
   Rx<ApiResponse<BaseModel>> postResponse = ApiResponse<BaseModel>.loading().obs;

@@ -12,7 +12,8 @@ class PostExampleScreen extends StatefulWidget {
 }
 
 class _PostExampleScreenState extends State<PostExampleScreen> {
-  final ExampleViewModel viewModel = Get.put(ExampleViewModel());
+
+  ExampleViewModel viewModel = Get.find<ExampleViewModel>();
 
   TextEditingController userIdController = TextEditingController();
   TextEditingController idController = TextEditingController();
@@ -86,7 +87,7 @@ class _PostExampleScreenState extends State<PostExampleScreen> {
                     child: const Text("ENVIAR")),
               ),
               Obx(() {
-                return viewModel.postResponse!.value!.when(
+                return viewModel.postResponse.value.when(
                   loading: () => Container(),
                   success: (data) => buildPostSuccess(data),
                   error: (message) => const Text(

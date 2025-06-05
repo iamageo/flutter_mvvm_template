@@ -32,7 +32,7 @@ class _GetExampleScreenState extends State<GetExampleScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Obx(() {
-            return viewModel.getResponse!.value.when(
+            return viewModel.getResponse.value.when(
               loading: () => buildShimmerEffect(),
               success: (list) => buildUserList(list),
               error: (message) => buildUserError(message),

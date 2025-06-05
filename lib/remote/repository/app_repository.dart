@@ -1,6 +1,7 @@
 import 'package:flutter_mvvm_template/remote/model/base_model.dart';
+import 'package:flutter_mvvm_template/remote/response/api_response.dart';
 
 abstract class AppRepository {
-  getDataExample() {}
-  postDataExample(BaseModel baseModel) {}
+  Future<ApiResponse<List<BaseModel>>> getDataExample();
+  Future<ApiResponse<BaseModel>> postDataExample(BaseModel baseModel);
 }
