@@ -114,6 +114,146 @@ lib
 * response - Contains response classes used for handling API responses.
 * router - Class organizes and centralizes the definitions of app screens, including their routes and bindings in GetX.
 
+## Unit Tests 🧪
+To ensure code quality and maintainability, we have added unit tests that cover the ExampleViewModel (and, consequently, the usage of ApiResponse.when(...)). Below are the steps and examples:
+
+```yml
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # For generating and using mocks
+  mockito: ^5.4.6
+  build_runner: ^2.4.15
+
+  # For serialization (already included in the template)
+  json_serializable: ^6.9.5
+  freezed: ^3.0.6
+
+  flutter_lints: ^2.0.0
+```
+
+### Preparing the Mocks
+Inside the test/ directory, create the file test/mocks.dart (if it doesn’t exist) with exactly the following content:
+
+```dart
+// test/mocks.dart
+
+import 'package:mockito/annotations.dart';
+import 'package:flutter_mvvm_template/remote/repository/app_repository.dart';
+import 'package:flutter_mvvm_template/remote/api/http_manager.dart';
+
+@GenerateMocks([
+  AppRepository,
+  HttpManager, // include this if you want to test AppRepositoryImpl
+])
+void main() {}
+```
+
+In the terminal, clean up old artifacts and generate the mocks:
+
+```bash
+flutter pub run build_runner clean
+dart run build_runner build --delete-conflicting-outputs
+```
+
+### Writing Tests for the ViewModel
+
+```dart
+// test/example_view_model_test.dart
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:flutter_mvvm_template/remote/model/base_model.dart';
+import 'package:flutter_mvvm_template/remote/response/api_response.dart';
+import 'package:flutter_mvvm_template/remote/repository/app_repository.dart';
+import 'package:flutter_mvvm_template/ui/controller/example_view_model.dart';
+
+// Import the generated mocks
+import 'mocks.mocks.dart';
+
+void main() {
+  late MockAppRepository mockRepository;
+  late ExampleViewModel viewModel;
+
+  setUp(() {
+    // 1) Create the mock instance
+    mockRepository = MockAppRepository();
+
+    // 2) Inject it into the ViewModel
+    viewModel = ExampleViewModel(api: mockRepository);
+
+    // 3) Initial state (optional)
+    viewModel.getResponse.value = ApiResponse.loading();
+  });
+
+  test('getPosts returns Success and when() works correctly', () async {
+    // 1) Fake data
+    final fakeList = <BaseModel>[
+      BaseModel(id: 1, title: 'Title 1', body: 'Body 1'),
+      BaseModel(id: 2, title: 'Title 2', body: 'Body 2'),
+    ];
+
+    // 2) Configure the mock to return ApiResponse.success
+    when(mockRepository.getDataExample())
+        .thenAnswer((_) async => ApiResponse.success(data: fakeList));
+
+    // 3) Execute the ViewModel method
+    await viewModel.getPosts();
+
+    // 4) Get the final state
+    final state = viewModel.getResponse.value;
+
+    // 5) Use when(...) to obtain a test String
+    final text = state.when(
+      loading: () => 'loading',
+      success: (data) => 'success with ${data.length}',
+      error: (msg) => 'error: $msg',
+    );
+
+    // 6) Verify the result of when()
+    expect(text, 'success with 2');
+  });
+
+  test('getPosts returns Error and when() handles the error correctly', () async {
+    const errorMessage = 'Network failure';
+
+    // 1) Configure the mock to return ApiResponse.error
+    when(mockRepository.getDataExample())
+        .thenAnswer((_) async => ApiResponse.error(message: errorMessage));
+
+    // 2) Execute
+    await viewModel.getPosts();
+
+    // 3) Get the final state
+    final state = viewModel.getResponse.value;
+
+    // 4) Use when(...) to extract the error message
+    final text = state.when(
+      loading: () => 'loading',
+      success: (_) => 'should not happen',
+      error: (msg) => 'error: $msg',
+    );
+
+    // 5) Verify the result of when()
+    expect(text, 'error: Network failure');
+  });
+}
+```
+
+### Run all tests
+
+```bash
+flutter test
+```
+
+You should see something like:
+
+```bash
+00:00 +2: test getPosts returns Success ...
+00:00 +3: test getPosts returns Error ...
+```
+
 ## Note 📝
 A different approach is to create a GetX controller for each screen and inject this controller into the binding. In my template, I opted to create only one controller and use it for multiple screens to simplify the structure.
 
