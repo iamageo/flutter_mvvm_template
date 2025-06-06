@@ -11,14 +11,17 @@ class ExampleViewModel extends GetxController {
 
   ExampleViewModel({required AppRepository api}) : _api = api;
 
-  Rx<ApiResponse<List<BaseModel>>> getResponse = ApiResponse<List<BaseModel>>.loading().obs;
+  Rx<ApiResponse<List<BaseModel>>> getResponse = const ApiResponse<List<BaseModel>>.loading().obs;
   Rx<ApiResponse<BaseModel>> postResponse = ApiResponse<BaseModel>.loading().obs;
 
   Future<void> getPosts() async {
 
     ApiResponse<List<BaseModel>> result = await _api.getDataExample();
 
-    result.whenOptional(
+    result.when(
+      loading: () {
+        getResponse.value = const ApiResponse.loading();
+      },
       success: (list) {
         getResponse.value = ApiResponse.success(data: list);
         update();
@@ -34,7 +37,10 @@ class ExampleViewModel extends GetxController {
 
     ApiResponse<BaseModel> result = await _api.postDataExample(model);
 
-    result.whenOptional(
+    result.when(
+      loading: () {
+        postResponse.value = const ApiResponse.loading();
+      },
       success: (list) {
         postResponse.value = ApiResponse.success(data: list);
         update();

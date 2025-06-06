@@ -7,15 +7,15 @@ part of 'base_model.dart';
 // **************************************************************************
 
 BaseModel _$BaseModelFromJson(Map<String, dynamic> json) => BaseModel(
-      id: json['id'] as int?,
-      title: json['title'] as String?,
-      body: json['body'] as String?,
-      userId: json['userId'] as int?,
-    );
+  id: (json['id'] as num?)?.toInt(),
+  title: json['title'] as String?,
+  body: json['body'] as String?,
+  userId: (json['userId'] as num?)?.toInt(),
+);
 
 Map<String, dynamic> _$BaseModelToJson(BaseModel instance) => <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
-      'body': instance.body,
-      'userId': instance.userId,
-    };
+  'id': instance.id,
+  'title': instance.title,
+  'body': instance.body,
+  'userId': instance.userId,
+};

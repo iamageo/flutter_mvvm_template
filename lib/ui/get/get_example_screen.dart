@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mvvm_template/remote/model/base_model.dart';
+import 'package:flutter_mvvm_template/remote/response/api_response.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 

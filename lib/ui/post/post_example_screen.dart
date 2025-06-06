@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mvvm_template/remote/response/api_response.dart';
 import 'package:get/get.dart';
 
 import '../../remote/model/base_model.dart';
